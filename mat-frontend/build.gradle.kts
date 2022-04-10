@@ -35,6 +35,4 @@ dockerRun {
     put("${project.projectDir}","/app")
 
   })
-  //arguments(" --mount \"type=bind,source=${project.projectDir},target=/app\"")
-
 } 
