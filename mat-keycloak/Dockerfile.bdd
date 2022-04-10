@@ -1,0 +1,5 @@
+FROM postgres:14-alpine
+
+ENV POSTGRES_USER keycloak
+ENV POSTGRES_PASSWORD changeit
+ENV POSTGRES_DB keycloak

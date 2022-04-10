@@ -1,0 +1,22 @@
+services: 
+  quarkus:
+    image: 'mat-backend'
+    ports: 
+      - "8090:8090"
+      - "5005:5005"
+    depends_on: 
+      - postgres
+
+  postgres:
+    image: 'mat-backend-bdd'
+    volumes:
+      - postgres_data_mat:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data_mat:
+      driver: local
