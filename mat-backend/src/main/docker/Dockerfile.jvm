@@ -84,10 +84,10 @@ COPY quarkus-app/app/ /deployments/app/
 COPY quarkus-app/quarkus/ /deployments/quarkus/
 
 EXPOSE 8090
-ENV JAVA_OPTS="-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
-ENV QUARKUS_LAUNCH_DEVMODE="true"
-ENV JAVA_DEBUG="true"
-ENV JAVA_APP_JAR="/deployments/quarkus-run.jar"
+ENV JAVA_OPTS "-Dquarkus.http.host=0.0.0.0 -Djava.util.logging.manager=org.jboss.logmanager.LogManager"
+ENV QUARKUS_LAUNCH_DEVMODE true
+ENV JAVA_DEBUG true
+ENV JAVA_APP_JAR /deployments/quarkus-run.jar
 
 CMD [ "java","-jar","/deployments/quarkus-run.jar" ]
 
