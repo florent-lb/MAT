@@ -13,7 +13,8 @@ repositories {
         gradlePluginPortal()
 }
     plugins {
-        id(quarkusPluginId) version quarkusPluginVersion        
+        id(quarkusPluginId) version quarkusPluginVersion   
+        
+         
     }
 }
-

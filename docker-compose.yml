@@ -1,0 +1,87 @@
+version: '3.9'
+services:  
+  postgres_keycloak:
+    image: postgres:14-alpine
+    ports: 
+      - "8001:5432"
+    restart: always
+    container_name: postgres_keycloak
+    user: postgres
+    environment:
+      - "POSTGRES_DB=keycloak"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=changeit"     
+    volumes:
+      - postgres_data_keycloak:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:legacy    
+    container_name: mat-keycloak
+    hostname: mat-keycloak
+    restart: always
+    ports: 
+      - "8081:8080"
+    volumes:
+      - ./mat-keycloak/config:/opt/jboss/keycloak/imports
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres_keycloak
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_SCHEMA: public
+      DB_PASSWORD: changeit
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: changeit 
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/mat-realm.json -Dkeycloak.profile.feature.upload_scripts=enabled                
+    depends_on: 
+      - postgres_keycloak
+    healthcheck:
+      test: ["CMD", "curl","--fail","http://localhost:8080/auth/realms/mat"]
+      interval: 5s
+      timeout: 2s
+      retries: 15
+
+  postgres_mat:
+    image: postgres:14-alpine    
+    ports: 
+      - "8000:5432"
+    restart: always
+    container_name: postgres_meetAtTheOffice
+    user: postgres
+    environment:
+      POSTGRES_DB: meetAtTheOffice
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeit    
+    volumes:
+      - postgres_data_meetAtTheOffice:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  
+  quarkus:
+    image: 'mat-backend'
+    ports: 
+      - "8090:8080"
+      - "5005:5005"
+    depends_on: 
+      - keycloak
+
+  frontend:
+    image: mat-frontend
+    volumes:
+      - ./mat-frontend/:/app:rw
+    ports:
+      - "3000:3000"
+  
+volumes:
+  postgres_data_meetAtTheOffice:
+      driver: local
+  postgres_data_keycloak:
+      driver: local

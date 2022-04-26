@@ -1,7 +1,6 @@
 plugins {
   id("com.github.node-gradle.node") version "3.2.1"
-        id("com.palantir.docker") version "0.33.0" apply true
-        id("com.palantir.docker-run") version "0.33.0" apply true
+  id("com.palantir.docker") apply true
 }
 
 
@@ -21,18 +20,5 @@ node {
 docker {
     files("package.json","package-lock.json")
     setName("mat-frontend")
-    tags("latest")   
-
+    tags("latest")
 }
-
-dockerRun {
-    setName("mat-frontend")
-    setImage("mat-frontend")
-    ports("3000:3000")
-    setClean(true)
-    volumes(mutableMapOf<Any, String>().apply {
-    
-    put("${project.projectDir}","/app")
-
-  })
-} 

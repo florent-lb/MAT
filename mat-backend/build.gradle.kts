@@ -1,8 +1,7 @@
 plugins {
     java
     id("io.quarkus")    
-    id("com.palantir.docker") version "0.33.0" apply true
-    id("com.palantir.docker-compose") version "0.33.0" apply true
+    id("com.palantir.docker") apply true
 }
 
 repositories {
@@ -67,9 +66,4 @@ docker {
     tags("latest")
     setDockerfile(project.file("src/main/docker/Dockerfile.jvm"))
     copySpec.from("build/quarkus-app").into("quarkus-app")    
-}
-
-dockerCompose {
-    setTemplate("docker-compose-template.yml")
-    setDockerComposeFile("docker-compose.yml")
 }
