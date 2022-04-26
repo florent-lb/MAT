@@ -2,15 +2,24 @@ services:
   quarkus:
     image: 'mat-backend'
     ports: 
-      - "8090:8090"
+      - "8090:8080"
       - "5005:5005"
     depends_on: 
       - postgres
 
   postgres:
-    image: 'mat-backend-bdd'
+    image: postgres:14-alpine    
+    ports: 
+      - "8000:5432"
+    restart: always
+    container_name: postgres_meetAtTheOffice
+    user: postgres
+    environment:
+      POSTGRES_DB: meetAtTheOffice
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: changeit    
     volumes:
-      - postgres_data_mat:/var/lib/postgresql/data
+      - postgres_data_meetAtTheOffice:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready"]
       interval: 10s
@@ -18,5 +27,5 @@ services:
       retries: 5
 
 volumes:
-  postgres_data_mat:
+  postgres_data_meetAtTheOffice:
       driver: local

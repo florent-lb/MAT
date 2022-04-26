@@ -18,7 +18,7 @@ tasks.register<Exec>("openBackend"){
 
 
 tasks.register<GradleBuild>("killThemAll") {
-     tasks = listOf("dockerStop","dockerClean","dockerComposeDown")
+     tasks = listOf("dockerStop","dockerClean","dockerComposeDown", "mat-backend:clean")
      doLast{
      println("\u001b[31m###################################################################################\u001b[0m")
      println("\u001b[33m All clean up, Goodbye\u001b[0m")

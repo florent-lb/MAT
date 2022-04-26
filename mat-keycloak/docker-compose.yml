@@ -2,6 +2,8 @@ version: '3.9'
 services:
   keycloak:
     image: quay.io/keycloak/keycloak:legacy    
+    container_name: mat-keycloak
+    hostname: mat-keycloak
     ports: 
       - "8081:8080"
     volumes:
@@ -10,7 +12,7 @@ services:
       DB_VENDOR: POSTGRES
       DB_ADDR: postgres
       DB_DATABASE: keycloak
-      DB_USER: keycloak
+      DB_USER: postgres
       DB_SCHEMA: public
       DB_PASSWORD: changeit
       KEYCLOAK_USER: admin
@@ -20,10 +22,15 @@ services:
       
   postgres:
     image: postgres:14-alpine
+    ports: 
+      - "8001:5432"
+    restart: always
+    container_name: postgres_keycloak
+    user: postgres
     environment:
-      POSTGRES_DB: keycloak
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: changeit    
+      - "POSTGRES_DB=keycloak"
+      - "POSTGRES_USER=postgres"
+      - "POSTGRES_PASSWORD=changeit"     
     volumes:
       - postgres_data_keycloak:/var/lib/postgresql/data
     healthcheck:
